@@ -2,4 +2,18 @@ Learning Notes for Project 1 Task Manager
 
 (1)MongoDB
 
-(1.1)
+(1.1)Install mongoose as a module for interacting with MongoDB
+
+Syntax in CLI : npm install mongoose
+
+(1.2)Connecting MongoDB
+By "Connect your application" Options in Connecting the Database in Mongo Atlas.
+You would obtain an url with login infos and save it under file '.env'
+
+***Using file '.env' would allow us to keep all the important information to one file and prevent sharing by file '.gitignore'
+
+***To use infos in '.env', we use module 'dotenv'
+First, we import it by syntax : "require('dotenv').config"
+Then, we can refer to the particular infos by process.env.VAL_NAME
+
+(1.3)
