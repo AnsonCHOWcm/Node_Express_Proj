@@ -16,4 +16,20 @@ You would obtain an url with login infos and save it under file '.env'
 First, we import it by syntax : "require('dotenv').config"
 Then, we can refer to the particular infos by process.env.VAL_NAME
 
+Finally, we create the function for connecting MongoDB by 
+```
+const connectDB = (url) => {
+    mongoose
+.connect(url,{
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+})
+.then(() => console.log('CONNECTED TO THE DB...'))
+.catch((err) => console.log(err))
+}
+
+```
+
 (1.3)
