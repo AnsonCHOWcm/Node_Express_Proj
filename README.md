@@ -113,9 +113,68 @@ const getTask = async (req, res) => {
 ```
 
 Note that we would encounter two types of non-ideal cases.
+
 First one : It means the id is matching the format but there is no such id
+
 Second one : It means general DB operations error like the syntax of the id provide is wrong
 
 ***Since Not Id would still execute the ".find" operation, therefore it would not be catch.
-If we want to catch this non-ideal case, we have create another response and return it, otherwise it would return two responses which makes the server confuse
+
+If we want to catch this non-ideal case, we have create another response and return it, 
+
+otherwise it would return two responses which makes the server confuse
+
+### (3) Update
+
+```
+const updateTask = async (req, res) => {
+    try {
+        const {id:taskID} = req.params
+        const task = await Task.findOneAndUpdate({_id:taskID},req.body,{
+            new: true,
+            runValidators: true,
+        })
+        if (!task){
+            return res.status(404).json({msg : `Not found ID : ${taskID}`})
+        }
+        res.status(200).json({task})
+    }catch(error){
+        res.status(500).json({msg:error})
+    }
+}
+```
+
+Note that we would pass in 3 objects:
+
+(1)Searching Condition
+
+(2)Edit Content
+
+(3)Edit Condition (like new: true => return new data and Specification from Schema)
+
+Note that there are two update-related operation : PUT and POST
+
+PUT : overwrite entire data even though the obejct features are not the same (Edit Condition -> overwrite = true)
+
+POST : only replace mentioned data features (Edit Condition -> overwrite = false)
+
+### (4) Delete
+
+```
+const deleteTask = async (req, res) => {
+    try{
+    const {id:taskID} = req.params
+    const task = await Task.findOneAndDelete({_id:taskID})
+    if(!task){
+        return res.status(404).json({msg: `Not found task ID : ${taskID}`})
+    }
+    res.status(200).json({task})
+    } catch(error) {
+        res.status(500).json({msg : error})
+    }
+
+}
+```
+
+Similar to Fine one particular object
 
