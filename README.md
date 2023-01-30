@@ -156,7 +156,7 @@ Note that there are two update-related operation : PUT and POST
 
 PUT : overwrite entire data even though the obejct features are not the same (Edit Condition -> overwrite = true)
 
-POST : only replace mentioned data features (Edit Condition -> overwrite = false)
+PATCH : only replace mentioned data features (Edit Condition -> overwrite = false)
 
 ### (4) Delete
 
