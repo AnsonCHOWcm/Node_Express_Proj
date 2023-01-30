@@ -4,6 +4,7 @@ const app = express();
 const tasks = require('./route/tasks')
 const connectDB = require('./db/connect')
 require('dotenv').config()
+const non_found = require('./middleware/non-found')
 
 const port = 5000
 
@@ -11,6 +12,7 @@ const port = 5000
 app.use(express.static('./public'))
 app.use(express.json())
 app.use('/api/v1/tasks', tasks)
+app.use(non_found)
 
 
 //connecting to the DataBase First, then make the server to listen a port
