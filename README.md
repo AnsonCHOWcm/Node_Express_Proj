@@ -1,12 +1,12 @@
 Learning Notes for Project 1 Task Manager
 
-(1)MongoDB
+#(1)MongoDB
 
-(1.1)Install mongoose as a module for interacting with MongoDB
+##(1.1)Install mongoose as a module for interacting with MongoDB
 
 Syntax in CLI : npm install mongoose
 
-(1.2)Connecting MongoDB
+##(1.2)Connecting MongoDB
 By "Connect your application" Options in Connecting the Database in Mongo Atlas.
 You would obtain an url with login infos and save it under file '.env'
 
@@ -32,4 +32,18 @@ const connectDB = (url) => {
 
 ```
 
-(1.3)
+##(1.3)Formating the Collections/Tables in MongoDB
+
+Since MongoaDB is NoSQL, there is no specific format for the data stored.
+We can use Schema under mongoose to specify the document format
+
+Syntax Example: 
+```
+const mongoose = require('mongoose');
+
+const TaskSchema = new mongoose.Schema({
+    name: String,completed: Boolean
+})
+
+module.exports = mongoose.model('Task', TaskSchema)
+```
