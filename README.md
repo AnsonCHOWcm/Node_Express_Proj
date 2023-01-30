@@ -62,7 +62,7 @@ module.exports = mongoose.model('Task', TaskSchema)
 
 ## (1.4) CRUD Operations in MongoDB
 
-### (1)Create
+### (1) Create
 
 ```
 const createTask = async (req, res) => {
@@ -76,4 +76,46 @@ const createTask = async (req, res) => {
 }
 ```
 We use try-and-catch because we have to tackle the error induced by the inputs not following the specification
+
+### (2) Read
+
+#### (2.1) Read All Data
+
+```
+const getAllTasks = async (req, res) => {
+    try{
+        const tasks = await Task.find({})
+        res.status(200).json({tasks})
+    } catch {
+        res.status(500).json({msg : error})
+    }
+}
+```
+
+Note that we can specify the data we find by passing object with special condition ro first argument of ".find"
+
+#### (2.2) Read One Data
+
+```
+const getTask = async (req, res) => {
+    try{
+    const {id:taskID} = req.params
+    const task = await Task.findOne({_id: taskID})
+    if (!task){
+        return res.status(404).json({msg: `Not found task ID : ${taskID}`})
+    }
+
+    res.status(200).json({task})
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
+}
+```
+
+Note that we would encounter two types of non-ideal cases.
+First one : It means the id is matching the format but there is no such id
+Second one : It means general DB operations error like the syntax of the id provide is wrong
+
+***Since Not Id would still execute the ".find" operation, therefore it would not be catch.
+If we want to catch this non-ideal case, we have create another response and return it, otherwise it would return two responses which makes the server confuse
 
