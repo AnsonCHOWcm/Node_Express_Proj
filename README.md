@@ -177,4 +177,3 @@ const deleteTask = async (req, res) => {
 ```
 
 Similar to Fine one particular object
-
