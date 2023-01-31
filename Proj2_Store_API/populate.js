@@ -10,8 +10,10 @@ const start = async () => {
         console.log('Success!!!!')
         await Product.deleteMany()
         await Product.create(Product_list)
+        process.exit(0)
     }catch(error){
         console.log(error)
+        process.exit(1)
     }
 
 }
