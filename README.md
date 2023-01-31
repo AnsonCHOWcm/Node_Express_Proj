@@ -177,3 +177,112 @@ const deleteTask = async (req, res) => {
 ```
 
 Similar to Fine one particular object
+
+Learning Objective of Proj 2
+
+# Filters for Read Operation in MongoDB
+
+## (1) Specify Searching
+
+```
+    const {featured, company, name, sort, field, numericFilters} = req.query
+    const queryObject = {}
+    if(featured){
+        queryObject.featured = featured === true ? true : false
+    }
+    if (company) {
+        queryObject.company = company
+    }
+    if (name) {
+        queryObject.name = {$regex: name, $options: 'i'}
+    }
+```
+
+This operation aims at finding the data with specific feature value
+
+Our approach would be breaking the query to extract the target features
+
+Then we set up the QueryObject to contain those obejects as features and it target value
+
+Note that partial search is also supported by using $regex and $ operation during creating the object
+
+## (2) Sorting
+
+```
+    let result = Products.find(queryObject)
+    if (sort) {
+        const sortList = sort.split(',').join(' ')
+        result = result.sort(sortList)
+    }else{
+        result = result.sort('createAt')
+    }
+    const product = await result
+```
+
+Since Sorting require the Query Object remaining for the chain callback to execute sorting for the extracted data
+
+Therefore, we use sync variable to contain the immediate result of the read operation
+
+Then we create sortList to include all the sorting features and pass it as an argument to the method 'sort'
+
+Finally, we would create async varible to wrap the query object
+
+## (3) Select
+
+```
+    if (field){
+        const fieldList = field.split(',').join(' ')
+        result = result.select(fieldList)
+    }
+        const product = await result
+```
+
+Select means only extracting the specific field of data to show
+Syntax is similar to Sorting
+
+## (4) Limit
+
+```
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 10
+    const skip = (page-1) * limit
+    result = result.skip(skip).limit(limit)
+    const product = await result
+```
+
+The basic concept is to restricting the number of data to be shown
+
+limit set the number of data to show on each page
+page specify which page to be shown
+skip determine actual number of data to skip
+
+## (5) Numberic Filters
+
+```
+    if(numericFilters){
+        const operationMap = {
+            '>':'$gt',
+            '>=' : '$gte',
+            '=' : '$eq',
+            '<' : '$lt',
+            '<=' : '$lte',
+        }
+        const regEx = /\b(>|<|>=|<=|=)\b/g
+        let filters = numericFilters.replace(regEx, (match) => `-${operationMap[match]}-`)
+        const options = ['price', 'rating']
+        filters = filters.split(',').forEach((item) => {
+            const [field, operation, thres] = item.split('-')
+            if (options.includes(field)){
+                queryObject[field] = {[operation]: Number(thres)}
+            }
+        })
+    }
+```
+
+There are three steps
+
+Step 1 : converting Frontend syntax to Backend synntax via OPerationMap and Regular Expression Matching
+
+Step 2 : Splitting the numberic filters onne-by-one
+
+Step 3 : check whether it contain the supported feature, if yes, we apply the filters to the featurs as an object
