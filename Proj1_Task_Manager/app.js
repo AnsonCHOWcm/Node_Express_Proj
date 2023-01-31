@@ -5,14 +5,16 @@ const tasks = require('./route/tasks')
 const connectDB = require('./db/connect')
 require('dotenv').config()
 const non_found = require('./middleware/non-found')
+const SyntaxErrorHandler = require('./errorHandle/syntax_error_handler')
 
-const port = 5000
+const port = process.env.PORT || 5000
 
 //middleware
 app.use(express.static('./public'))
 app.use(express.json())
 app.use('/api/v1/tasks', tasks)
 app.use(non_found)
+app.use(SyntaxErrorHandler)
 
 
 //connecting to the DataBase First, then make the server to listen a port
