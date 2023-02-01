@@ -18,8 +18,23 @@ const login = async (req, res) => {
 }
 
 const dashboard = async (req, res) => {
-    const luckyNumber = Math.floor(Math.random()*100)
-    res.status(200).json({msg: `Hello,`, sercet : `Here is your authoerized data, your lucky number is ${luckyNumber}`})
+
+    const authoriztion = req.headers.authorization
+
+    if (!authoriztion || !authoriztion.startsWith('Bearer ')){
+        throw new CustomAPIError('No Token', 401)
+    }
+
+    const token = authoriztion.split(' ')[1]
+
+    try{
+        const decoded = jwt.verify(token, process.env.JWT_SERCET)
+        const luckyNumber = Math.floor(Math.random()*100)
+        res.status(200).json({msg: `Hello, ${decoded.username}`, sercet : `Here is your authoerized data, your lucky number is ${luckyNumber}`})    
+
+    } catch (error) {
+        throw new CustomAPIError('Not authorized',401)
+    }
 
 }
 module.exports = {

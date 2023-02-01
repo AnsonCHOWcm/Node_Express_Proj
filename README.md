@@ -313,3 +313,44 @@ Note that JWT consist of three parts
 (2) Playload : it is some information associated which usually would be some identification information
 
 (3) Signsture : a method ('.sign') and we pass in a "JWT_SECRET" as a signture
+
+# (2) Receiving Request with JWT
+
+## (2.1) How Front End passing JWT
+
+Basically they would just passing the JWT as an object.
+
+To specify the token, the request may have some specification in front of the JWT (Example : 'Bearer ')
+
+```
+const { data } = await axios.get('/api/v1/dashboard', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+```
+
+## (2.2) How Back End deal with the JWT Request
+
+Step 1 : check whether there exist any tokens or any specified token
+
+```
+    if (!authoriztion || !authoriztion.startsWith('Bearer ')){
+        throw new CustomAPIError('No Token', 401)
+    }
+```
+
+Step 2 : verify the extracted token with the signture SECRET
+
+```
+const token = authoriztion.split(' ')[1]
+
+    try{
+        const decoded = jwt.verify(token, process.env.JWT_SERCET)
+        const luckyNumber = Math.floor(Math.random()*100)
+        res.status(200).json({msg: `Hello, ${decoded.username}`, sercet : `Here is your authoerized data, your lucky number is ${luckyNumber}`})    
+
+    } catch (error) {
+        throw new CustomAPIError('Not authorized',401)
+    }
+```
