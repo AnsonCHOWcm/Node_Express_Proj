@@ -286,3 +286,30 @@ Step 1 : converting Frontend syntax to Backend synntax via OPerationMap and Regu
 Step 2 : Splitting the numberic filters onne-by-one
 
 Step 3 : check whether it contain the supported feature, if yes, we apply the filters to the featurs as an object
+
+Learning Objective of Proj 3
+
+# JWT
+
+JWT is a token that used to commuicate between Front-end and Back-end.
+
+Besides, it is important as it can be used to verify the user's identification
+
+So that Back-End can passing high privacy data to the respon once JWT is here
+
+# (0) Relevant Package : jsonwebtoken
+
+# (1) Creating JWT Object
+
+```
+const jwt = require('jsonwebtoken')
+const token = jwt.sign({id, username},process.env.JWT_SERCET, {expiresIn: '30d'})
+```
+
+Note that JWT consist of three parts
+
+(1) Header : it is not shown or not required to be defined when we create the JWT
+
+(2) Playload : it is some information associated which usually would be some identification information
+
+(3) Signsture : a method ('.sign') and we pass in a "JWT_SECRET" as a signture
