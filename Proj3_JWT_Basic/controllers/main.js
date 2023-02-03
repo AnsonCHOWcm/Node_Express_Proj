@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const CustomAPIError = require('../errors/custom-error')
+const {BadRequestError} = require('../errors/index')
 require('dotenv').config();
 
 const login = async (req, res) => {
