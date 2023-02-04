@@ -357,7 +357,7 @@ const token = authoriztion.split(' ')[1]
 
 Learning Notes for Project 4 Jobs API
 
-# Dealing secret information (like password) : hash
+# (1) Dealing secret information (like password) : hash
 
 To enhance our information security, we do not want the users' secret information to be stored directly in the Database
 
@@ -373,4 +373,18 @@ UserSchema.pre('save', async function(next){
     salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
 })
+```
+
+# (2) Schema Instant Methods
+
+Mongoose allow developer to declare some methods into the Schema. (SCHEMA.methods.FUNCNAME)
+
+Then they are react with the table via those methods
+
+
+```
+UserSchema.methods.createJWT = function () {
+    const token = jwt.sign({userId: this._id, name: this.name},process.env.JWT_SECRET, {expiresIn:process.env.JWT_LIFETIME})
+    return token
+}
 ```
