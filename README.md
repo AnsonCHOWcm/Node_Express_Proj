@@ -354,3 +354,23 @@ const token = authoriztion.split(' ')[1]
         throw new CustomAPIError('Not authorized',401)
     }
 ```
+
+Learning Notes for Project 4 Jobs API
+
+# Dealing secret information (like password) : hash
+
+To enhance our information security, we do not want the users' secret information to be stored directly in the Database
+
+Then we can use hash to generate the one-to-one mapping from information to hashed code
+
+To do so, we would use module "bcrypt"
+
+Besides, we may use mongoose middleware "pre" of the Schema to execute the hash before storing the value into Database
+
+```
+const bcrypt = require('bcryptjs')
+UserSchema.pre('save', async function(next){
+    salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, salt)
+})
+```
